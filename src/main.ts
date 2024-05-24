@@ -5,6 +5,8 @@ import { SwaggerModule } from '@nestjs/swagger/dist/swagger-module';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 
 async function bootstrap() {
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'; 
+
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()

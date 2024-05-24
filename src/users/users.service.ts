@@ -25,6 +25,10 @@ export class UsersService {
       .then(user => bcrypt.compare(UserDto.password, user.password) ? `${user._id}` : '')
   }
 
+  async findAll(): Promise<User[]> {
+    return this.userModel.find().exec()
+  }
+
   findOne(id: string) {
     return this.userModel.findById(id);
   }
@@ -42,4 +46,15 @@ export class UsersService {
     const hashedPass = await bcrypt.hash(password, saltOrRounds)
     return hashedPass
   }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({
+      email
+    });
+  }
+
+  async checkPassword(password: string, userPassword: string): Promise<boolean> {
+    return bcrypt.compare(password, userPassword);
+  }
+  
 }

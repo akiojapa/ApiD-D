@@ -19,11 +19,18 @@ export class UsersController {
     return this.usersService.create(UserDto);
   }
 
-  @Get()
+  @Get('/login')
   @ApiOkResponse()
   @ApiBadRequestResponse()
   login(@Body(new ValidationPipe()) UserDto: loginUserDto) {
     return this.usersService.login(UserDto);
+  }
+
+  @Get('')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  findAll() {
+    return this.usersService.findAll();
   }
 
   @Get(':id')
