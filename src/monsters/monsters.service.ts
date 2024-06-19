@@ -37,6 +37,10 @@ export class MonstersService {
     return this.monsterModel.findByIdAndDelete(id);
   }
 
+  async create(monster: Monster): Promise<Monster> {
+    return new this.monsterModel(monster).save();
+  }
+
   private async getMonsterApi() {
   
     return this.DDService.fetchAndSaveMonster();

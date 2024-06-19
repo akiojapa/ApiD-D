@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { createUserDto } from './dto/createUser.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id/dist/pipes/is-object-id.pipe';
@@ -15,36 +15,57 @@ export class UsersController {
   @Post()
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  create(@Body(new ValidationPipe()) UserDto: createUserDto) {
-    return this.usersService.create(UserDto);
+  async create(@Body(new ValidationPipe()) UserDto: createUserDto) {
+    try {
+      return this.usersService.create(UserDto);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Get('/login')
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  login(@Body(new ValidationPipe()) UserDto: loginUserDto) {
-    return this.usersService.login(UserDto);
+  async login(@Body(new ValidationPipe()) UserDto: loginUserDto) {
+    try {
+      return this.usersService.login(UserDto);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Get('')
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    try {
+      return this.usersService.findAll();
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Get(':id')
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  findOne(@Param('id', IsObjectIdPipe) id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', IsObjectIdPipe) id: string) {
+    try {
+      return this.usersService.findOne(id);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  update(@Param('id', IsObjectIdPipe) id: string, @Body(new ValidationPipe()) UserDto: updateUserDto) {
-    return this.usersService.update(id, UserDto);
+  async update(@Param('id', IsObjectIdPipe) id: string, @Body(new ValidationPipe()) UserDto: updateUserDto) {
+    try {
+      return this.usersService.update(id, UserDto);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @UseGuards(AuthGuard)
@@ -52,7 +73,11 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOkResponse()
   @ApiBadRequestResponse()
-  remove(@Param('id', IsObjectIdPipe) id: string) {
-    return this.usersService.remove(id);
+  async remove(@Param('id', IsObjectIdPipe) id: string) {
+    try {
+      return this.usersService.remove(id);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 }

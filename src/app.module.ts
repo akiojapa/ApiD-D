@@ -6,6 +6,10 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MonstersModule } from './monsters/monsters.module';
+import { Log, LogSchema } from './interceptor/log.schema';
+import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { LogModel } from './interceptor/log.model';
+import { ExceptionLoggingInterceptor } from './interceptor/exception.interceptor';
 
 @Module({
   imports: [
@@ -18,11 +22,12 @@ import { MonstersModule } from './monsters/monsters.module';
       },
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([{name: Log.name, schema: LogSchema}]),
     UsersModule,
     AuthModule,
     MonstersModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LoggingInterceptor, LogModel, ExceptionLoggingInterceptor],
 })
 export class AppModule { }
